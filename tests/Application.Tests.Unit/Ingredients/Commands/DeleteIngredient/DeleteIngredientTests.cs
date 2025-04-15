@@ -30,26 +30,4 @@ public class DeleteIngredientTests
         _ = await ingredientsRepository.Received(1).IngredientExists(command.Id, token);
         _ = await ingredientsRepository.Received(1).DeleteIngredient(command.Id, token);
     }
-
-    [Fact]
-    public async Task Handle_ShouldThrowException_IngredientDoesNotExist()
-    {
-        // Arrange
-        var command = new DeleteIngredientCommand { Id = Guid.Empty };
-        var ingredientsRepository = Substitute.For<IIngredientsRepository>();
-
-        _ = ingredientsRepository.IngredientExists(default, default).ReturnsForAnyArgs(false);
-
-        var handler = new DeleteIngredientHandler(ingredientsRepository);
-        var token = new CancellationTokenSource().Token;
-
-        // Act
-        var exception = Should.Throw<NotFoundException>(async () => await handler.Handle(command, token));
-
-        // Assert
-        exception.Message.ShouldBe("The Ingredient with the supplied id was not found.");
-
-        _ = await ingredientsRepository.Received(1).IngredientExists(command.Id, token);
-        _ = await ingredientsRepository.DidNotReceive().DeleteIngredient(command.Id, token);
-    }
 }

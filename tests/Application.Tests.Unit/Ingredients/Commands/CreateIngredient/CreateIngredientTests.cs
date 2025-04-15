@@ -33,5 +33,4 @@ public class CreateIngredientTests
         // Assert
         _ = await ingredientsRepository.Received(1).CreateIngredient(command.Name, command.Description, token);
     }
-
 }
